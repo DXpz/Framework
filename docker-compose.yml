@@ -15,6 +15,23 @@ services:
     volumes:
       - mysql_data:/var/lib/mysql
     command: --default-authentication-plugin=mysql_native_password
+    networks:
+      - ci_network
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ci_php
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - ci_network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -29,6 +46,12 @@ services:
       PMA_PASSWORD: root
     depends_on:
       - mysql
+    networks:
+      - ci_network
 
 volumes:
   mysql_data:
+
+networks:
+  ci_network:
+    driver: bridge
