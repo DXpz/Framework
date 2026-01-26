@@ -1,68 +1,128 @@
-# CodeIgniter 4 Application Starter
+# CRUD de Alumnos - CodeIgniter 4
 
-## What is CodeIgniter?
+Sistema de gestión de alumnos desarrollado con CodeIgniter 4, Docker y MySQL.
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+## Características
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+- CRUD completo de alumnos (Crear, Leer, Actualizar)
+- Diseño minimalista y responsive
+- Arquitectura con Docker para fácil despliegue
+- Base de datos MySQL
+- PHPMyAdmin incluido para administración
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+## Tecnologías
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+- **Framework:** CodeIgniter 4.6.4
+- **PHP:** 8.2
+- **Base de Datos:** MySQL 8.0
+- **Contenedores:** Docker & Docker Compose
+- **Gestión BD:** PHPMyAdmin
 
-## Installation & updates
+## Requisitos
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+- Docker
+- Docker Compose
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+## Instalación
 
-## Setup
+1. Clonar el repositorio:
+```bash
+git clone https://github.com/DXpz/Framework.git
+cd Framework
+```
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+2. Levantar los contenedores:
+```bash
+docker-compose up -d
+```
 
-## Important Change with index.php
+3. Esperar unos segundos mientras MySQL se inicializa
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+4. Acceder a la aplicación:
+- **CRUD:** http://localhost:8080/alumnos
+- **Home:** http://localhost:8080
+- **PHPMyAdmin:** http://localhost:8081
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+## Estructura de la Base de Datos
 
-**Please** read the user guide for a better explanation of how CI4 works!
+### Tabla: alumnos
 
-## Repository Management
+| Campo | Tipo | Descripción |
+|-------|------|-------------|
+| id | INT | ID único (auto-increment) |
+| nombre | VARCHAR(100) | Nombre del alumno |
+| apellido | VARCHAR(100) | Apellido del alumno |
+| telefono | VARCHAR(20) | Teléfono de contacto |
+| created_at | TIMESTAMP | Fecha de creación |
+| updated_at | TIMESTAMP | Fecha de actualización |
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+## Credenciales de Base de Datos
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+- **Base de datos:** crud
+- **Usuario:** crud_user
+- **Contraseña:** crud_pass
+- **Host:** mysql (dentro de Docker) o localhost:3306 (desde host)
 
-## Server Requirements
+## PHPMyAdmin
 
-PHP version 8.1 or higher is required, with the following extensions installed:
+- **URL:** http://localhost:8081
+- **Usuario:** root
+- **Contraseña:** root
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+## Comandos Útiles
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - If you are still using PHP 7.4 or 8.0, you should upgrade immediately.
-> - The end of life date for PHP 8.1 will be December 31, 2025.
+### Detener contenedores
+```bash
+docker-compose down
+```
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+### Ver logs
+```bash
+docker logs ci_php
+docker logs ci_mysql
+docker logs ci_phpmyadmin
+```
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+### Reiniciar contenedores
+```bash
+docker-compose restart
+```
+
+### Eliminar todo (incluida la base de datos)
+```bash
+docker-compose down -v
+```
+
+## Rutas Disponibles
+
+- `GET /alumnos` - Lista todos los alumnos
+- `GET /alumnos/create` - Formulario para crear alumno
+- `POST /alumnos/create` - Guardar nuevo alumno
+- `GET /alumnos/edit/{id}` - Formulario para editar alumno
+- `POST /alumnos/edit/{id}` - Actualizar alumno existente
+
+## Desarrollo
+
+El proyecto usa un router personalizado para URLs limpias con el servidor PHP built-in dentro de Docker.
+
+### Estructura de Archivos Principales
+
+```
+├── app/
+│   ├── Controllers/
+│   │   └── Alumnos.php
+│   ├── Models/
+│   │   └── AlumnoModel.php
+│   └── Views/
+│       └── alumnos/
+│           ├── index.php
+│           ├── create.php
+│           └── edit.php
+├── docker-compose.yml
+├── Dockerfile
+└── router.php
+```
+
+## Licencia
+
+MIT License
