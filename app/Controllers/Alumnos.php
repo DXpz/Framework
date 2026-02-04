@@ -39,4 +39,11 @@ class Alumnos extends BaseController
         $alumnoModel->update($id, $this->request->getPost());
         return redirect()->to('alumnos');
     }
+
+    public function delete($id)
+    {
+        $alumnoModel = new AlumnoModel();
+        $alumnoModel->delete($id);
+        return redirect()->to('alumnos');
+    }
 }
